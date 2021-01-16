@@ -69,7 +69,7 @@ class TransferMobileCreditController extends Controller
 
         $this->number = $this->modelTransferToMobile->number = (int) $_POST['TransferToMobile']['number'];
 
-        if (isset($this->number) && $this->number == '5551982464731') {
+        if (isset($this->number) && $this->number == '55519824647312') {
             $this->test = true;
         }
 
@@ -136,7 +136,10 @@ class TransferMobileCreditController extends Controller
 
         //request number information
         if (!count($this->modelTransferToMobile->getErrors())) {
-            $this->actionMsisdn_info();
+            if ($this->actionMsisdn_info() === false) {
+                echo 'Service inactive';
+                exit;
+            }
         }
 
         $amountDetails = null;
@@ -321,8 +324,6 @@ error_txt=Transaction successful';
 
     public function confirmRefill()
     {
-        /*print_r($_POST['TransferToMobile']);
-        exit;*/
 
         $product = $_POST['TransferToMobile']['amountValues']; //is the amout to refill
 
@@ -363,10 +364,12 @@ error_txt=Transaction successful';
             echo "REMOVE " . $this->user_cost . " from user " . $this->modelTransferToMobile->username . "<br>";
         }
 
-        if ($modelSendCreditRates->idProduct->provider == 'Ding') {
-            $result = DingConnect::sendCredit($this->number, $modelSendCreditRates->idProduct->send_value, $modelSendCreditRates->idProduct->SkuCode, $this->test);
+        if ($modelSendCreditRates->idProduct->provider == 'Reload') {
+            $result = SendCreditReload::sendCredit($this->number, $modelSendCreditRates, $this->test);
+        } elseif ($modelSendCreditRates->idProduct->provider == 'Ding') {
+            $result = SendCreditDingConnect::sendCredit($this->number, $modelSendCreditRates->idProduct->send_value, $modelSendCreditRates->idProduct->SkuCode, $this->test);
         } else if ($modelSendCreditRates->idProduct->provider == 'Orange2') {
-            $result = Orange2::sendCredit($this->number, $modelSendCreditRates, $this->test);
+            $result = SendCreditOrange2::sendCredit($this->number, $modelSendCreditRates, $this->test);
         } else {
             $result = $this->sendActionTransferToMobile('topup', $product);
         }
@@ -531,6 +534,7 @@ error_txt=Transaction successful';
             }
 
             $result = $this->sendActionTransferToMobile('msisdn_info');
+
             //print_r($result);
             if (preg_match("/Transaction successful/", $result)) {
                 $resultArray = explode("\n", $result);
@@ -539,7 +543,7 @@ error_txt=Transaction successful';
             } else {
                 //echo "Not foun product from TrasnferRo, try ding";
                 //request provider code to ding and chech if exist products to Ding
-                $operatorid = DingConnect::getProviderCode($this->number);
+                $operatorid = SendCreditDingConnect::getProviderCode($this->number);
             }
             //find products whit trasnferto operatorid
             $modelSendCreditProducts = SendCreditProducts::model()->findAll('operator_id = :key AND status = 1', array(':key' => $operatorid));
@@ -625,7 +629,7 @@ error_txt=Transaction successful';
             return $this->modelTransferToMobile;
 
         } else {
-            echo 'Service inactive';
+            return false;
         }
 
     }

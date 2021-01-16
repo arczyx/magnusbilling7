@@ -58,7 +58,7 @@ class CampaignPoll extends Model
                 'numerical', 'integerOnly' => true),
             array('name, arq_audio', 'length', 'max' => 100),
             array('option0, option1, option2, option3, option4, option5, option6, option7, option8, option9',
-                'length', 'max' => 150),
+                'length', 'max' => 300),
             array('description', 'length', 'max' => 300),
 
         );

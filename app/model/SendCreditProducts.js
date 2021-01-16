@@ -62,6 +62,9 @@ Ext.define('MBilling.model.SendCreditProducts', {
     }, {
         name: 'status',
         type: 'int'
+    }, {
+        name: 'retail_price',
+        type: 'string'
     }, 'idUserusername'],
     proxy: {
         type: 'uxproxy',

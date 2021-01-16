@@ -16,7 +16,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <?php
 
 if (isset($_POST['TransferToMobile']['metric']) && strlen($_POST['TransferToMobile']['metric'])) {
-    $metric_operator_name = Orange2::checkMetric($_POST['TransferToMobile']['metric']);
+    $metric_operator_name = SendCreditOrange2::checkMetric($_POST['TransferToMobile']['metric']);
 
     if ($metric_operator_name === false) {
         echo '<div align=center id="container">';

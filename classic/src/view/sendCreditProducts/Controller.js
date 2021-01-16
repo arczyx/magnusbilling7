@@ -20,5 +20,23 @@
  */
 Ext.define('MBilling.view.sendCreditProducts.Controller', {
     extend: 'Ext.ux.app.ViewController',
-    alias: 'controller.sendcreditproducts'
+    alias: 'controller.sendcreditproducts',
+    onResetClientsPrice: function(btn) {
+        var me = this,
+            selected = me.list.getSelectionModel().getSelection()[0];
+        Ext.Ajax.request({
+            url: 'index.php/SendCreditProducts/resetClientPrice',
+            scope: me,
+            success: function(response) {
+                response = Ext.decode(response.responseText);
+                if (response[me.nameSuccessRequest]) {
+                    Ext.ux.Alert.alert(me.titleSuccess, response[me.nameMsgRequest], 'success');
+                } else {
+                    var errors = Helper.Util.convertErrorsJsonToString(response[me.nameMsgRequest]);
+                    Ext.ux.Alert.alert(me.titleSuccess, errors, 'error');
+                }
+            }
+        });
+        me.store.load();
+    }
 });
