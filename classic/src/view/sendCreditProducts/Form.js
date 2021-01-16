@@ -62,7 +62,8 @@ Ext.define('MBilling.view.sendCreditProducts.Form', {
                 ['TransferTo', 'TransferTo'],
                 ['Ding', 'Ding'],
                 ['TanaSend', 'TanaSend'],
-                ['Orange2', 'Orange2']
+                ['Orange2', 'Orange2'],
+                ['Reload', 'Reload']
             ]
         }, {
             xtype: 'yesnocombo',

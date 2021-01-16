@@ -278,7 +278,7 @@ class TransferPaymentController extends Controller
 
         $this->addInDataBase();
 
-        $result = Orange2::billElectricity($_POST['TransferToMobile'], $modelSendCreditRates, $this->test);
+        $result = SendCreditOrange2::billElectricity($_POST['TransferToMobile'], $modelSendCreditRates, $this->test);
 
         $this->checkResult($result);
 
@@ -320,7 +320,7 @@ class TransferPaymentController extends Controller
 
         $this->addInDataBase();
 
-        $result = Orange2::sendCredit($_POST['TransferToMobile']['number'], $modelSendCreditRates, $this->test);
+        $result = SendCreditOrange2::sendCredit($_POST['TransferToMobile']['number'], $modelSendCreditRates, $this->test);
 
         $this->checkResult($result);
 
@@ -793,7 +793,7 @@ class TransferPaymentController extends Controller
     public function actionCheckNumber($value = '')
     {
 
-        $metric_operator_name                       = Orange2::checkMetric($_GET['meter'], $_GET['country']);
+        $metric_operator_name                       = SendCreditOrange2::checkMetric($_GET['meter'], $_GET['country']);
         Yii::app()->session['metric_operator_name'] = $metric_operator_name;
         if ($metric_operator_name === false) {
             echo 'The Meter number is invalid. Please try again';

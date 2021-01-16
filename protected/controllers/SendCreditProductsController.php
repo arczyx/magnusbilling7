@@ -31,4 +31,15 @@ class SendCreditProductsController extends Controller
         $this->titleReport   = Yii::t('zii', 'Send Credit Products');
         parent::init();
     }
+
+    public function actionResetClientPrice()
+    {
+
+        SendCreditRates::model()->deleteAll();
+
+        echo json_encode(array(
+            $this->nameSuccess => true,
+            $this->nameMsg     => 'Clientes rates reseted',
+        ));
+    }
 }
