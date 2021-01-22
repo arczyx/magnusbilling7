@@ -324,8 +324,6 @@ error_txt=Transaction successful';
 
     public function confirmRefill()
     {
-        /*print_r($_POST['TransferToMobile']);
-        exit;*/
 
         $product = $_POST['TransferToMobile']['amountValues']; //is the amout to refill
 

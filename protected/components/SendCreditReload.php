@@ -119,6 +119,43 @@ class SendCreditReload
 
         $operatorId = SendCreditReload::getOperator($number, $access_token);
 
+        if ($modelSendCreditRates->idProduct->send_value == 0) {
+
+            echo "https://topups.reloadly.com/operators/fx-rate<br>";
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, "https://topups.reloadly.com/operators/fx-rate");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+
+            curl_setopt($ch, CURLOPT_POST, true);
+
+            $requestFields = json_encode([
+                'operatorId' => $operatorId,
+                'amount'     => 1,
+
+            ]);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $requestFields);
+
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                "Content-Type: application/json",
+                "Accept: application/com.reloadly.topups-v1+json",
+                "Authorization: Bearer " . $access_token,
+            ));
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($response);
+
+            if (isset($result->fxRate)) {
+
+                $modelSendCreditRates->idProduct->send_value = number_format((1 / $result->fxRate * $_POST['TransferToMobile']['amountValuesBDT']), 2);
+            } else {
+                exit('invalid amount receiveValue');
+            }
+
+        }
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, "https://topups.reloadly.com/topups");

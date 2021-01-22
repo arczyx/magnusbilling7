@@ -64,6 +64,10 @@ if (isset($_POST['TransferToMobile']['metric']) && strlen($_POST['TransferToMobi
 <?php echo $form->hiddenField($modelTransferToMobile, 'country', array('value' => $_POST['TransferToMobile']['country'])); ?>
 <?php echo $form->hiddenField($modelTransferToMobile, 'operator', array('value' => $_POST['TransferToMobile']['operator'])); ?>
 <?php echo $form->hiddenField($modelTransferToMobile, 'amountValues', array('value' => $_POST['TransferToMobile']['amountValues'])); ?>
+
+<?php if (isset($_POST['TransferToMobile']['amountValuesBDT'])): ?>
+<?php echo $form->hiddenField($modelTransferToMobile, 'amountValuesBDT', array('value' => $_POST['TransferToMobile']['amountValuesBDT'])); ?>
+<?php endif?>
 <?php echo $form->hiddenField($modelTransferToMobile, 'confirmed', array('value' => 'ok')); ?>
 
 

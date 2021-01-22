@@ -10,12 +10,55 @@ class SendCreditDingConnect
 {
     public function getKey()
     {
+
+        /*
+        INSERT INTO pkg_configuration VALUES
+        (NULL, 'Dingo API', 'ding_api', '', 'Dingo API', 'global', '1');
+
+         */
+
         $config = LoadConfig::getConfig();
         return $config['global']['ding_api'];
     }
 
     public static function sendCredit($number, $send_value, $SkuCode, $test)
     {
+
+        if ($send_value == 0) {
+
+            $post = array(
+                "SendValue"       => 5,
+                "SendCurrencyIso" => "EUR",
+                "ReceiveValue"    => 0,
+                "SkuCode"         => "BD_AX_TopUp",
+                "BatchItemRef"    => "string",
+            );
+
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, "https://api.dingconnect.com/api/V1/EstimatePrices");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'api_key: ' . SendCreditDingConnect::getKey(),
+            ));
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+            curl_close($ch);
+
+            $result = json_decode($server_output);
+
+            if (isset($result->Item->Price->ReceiveValue)) {
+
+                $send_value = number_format((5 / $result->Item->Price->ReceiveValue * $_POST['TransferToMobile']['amountValuesBDT']), 2);
+            } else {
+                exit('invalid amount receiveValue');
+            }
+
+        }
         //SendCreditDingConnect::getProducts('VOBR');
         if (preg_match('/^00/', $number)) {
             $number = substr($number, 2);
