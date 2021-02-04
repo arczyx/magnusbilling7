@@ -402,7 +402,12 @@ class CallController extends Controller
         $configFile   = '/etc/asterisk/res_config_mysql.conf';
         $array        = parse_ini_file($configFile);
 
-        @exec('mysql -u' . $array['dbuser'] . ' -p' . $array['dbpass'] . ' -h' . $array['dbhost'] . '  ' . $array['dbname'] . ' -e "' . $sql . '"  | sed "s/\'/\'/;s/\t/,/g;s/^//;s/$//;s/\n//g" > /var/www/html/mbilling/tmp/' . $fileName . '.csv ');
+        if (Yii::app()->session['language'] == 'pt_BR') {
+            @exec('mysql -u' . $array['dbuser'] . ' -p' . $array['dbpass'] . ' -h' . $array['dbhost'] . '  ' . $array['dbname'] . ' -e "' . $sql . '"  | sed "s/\'/\'/;s/\t/;/g;s/^//;s/$//;s/\n//g" > /var/www/html/mbilling/tmp/' . $fileName . '.csv ');
+        } else {
+            @exec('mysql -u' . $array['dbuser'] . ' -p' . $array['dbpass'] . ' -h' . $array['dbhost'] . '  ' . $array['dbname'] . ' -e "' . $sql . '"  | sed "s/\'/\'/;s/\t/,/g;s/^//;s/$//;s/\n//g" > /var/www/html/mbilling/tmp/' . $fileName . '.csv ');
+        }
+
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $fileName . '.csv"');
         header('Content-Transfer-Encoding: binary');

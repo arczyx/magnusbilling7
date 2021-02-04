@@ -196,16 +196,14 @@ class MassiveCallCommand extends ConsoleCommand
                 $searchTariff = $searchTariff[1];
 
                 if ($searchTariff[0]['trunk_group_type'] == 1) {
-                    $order = 'id ASC';
+                    $sql = "SELECT * FROM pkg_trunk_group_trunk WHERE id_trunk_group = " . $searchTariff[0]['id_trunk_group'] . " ORDER BY id ASC";
                 } else if ($searchTariff[0]['trunk_group_type'] == 2) {
-                    $order = 'RAND()';
-                }
+                    $sql = "SELECT * FROM pkg_trunk_group_trunk WHERE id_trunk_group = " . $searchTariff[0]['id_trunk_group'] . " ORDER BY RAND() ";
 
-                $modelTrunkGroupTrunk = TrunkGroupTrunk::model()->find([
-                    'condition' => 'id_trunk_group = :key',
-                    'params'    => [':key' => $searchTariff[0]['id_trunk_group']],
-                    'order'     => $order,
-                ]);
+                } else if ($searchTariff[0]['trunk_group_type'] == 3) {
+                    $sql = "SELECT *, (SELECT buyrate FROM pkg_rate_provider WHERE id_provider = tr.id_provider AND id_prefix = " . $searchTariff[0]['id_prefix'] . " LIMIT 1) AS buyrate  FROM pkg_trunk_group_trunk t  JOIN pkg_trunk tr ON t.id_trunk = tr.id WHERE id_trunk_group = " . $searchTariff[0]['id_trunk_group'] . " ORDER BY buyrate IS NULL , buyrate ";
+                }
+                $modelTrunkGroupTrunk = TrunkGroupTrunk::model()->findBySql($sql);
 
                 foreach ($modelTrunkGroupTrunk as $key => $trunk) {
                     $modelTrunk = Trunk::model()->findByPk((int) $modelTrunkGroupTrunk->id_trunk);

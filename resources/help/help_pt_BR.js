@@ -302,10 +302,10 @@ Veja na imagem abaixo como ficaria.
 
 
 Expressão regular para celular
-^[1-9][0-9]9\d{8}$|^0[1-9][0-9]9\d{8}$|^55[1-9][0-9]9\d{8}$
+^[1-9][0-9]9\\d{8}$|^0[1-9][0-9]9\\d{8}$|^55[1-9][0-9]9\\d{8}$
 
 Expressão regular para fixo
-^[1-9][0-9]\d{8}$|^0[1-9][0-9]\d{8}$|^55[1-9][0-9]\d{8}$
+^[1-9][0-9]\\d{8}$|^0[1-9][0-9]\\d{8}$|^55[1-9][0-9]\\d{8}$
 
 
 
@@ -563,6 +563,8 @@ Caso contrário ficará como pendente, isso quer dizer que seu tronco rejeitou e
 Se for ativado na campanha a opção números bloqueados, e o número estiver cadastrado no menu torpedo de voz & SMS, submenu números Restritos, o status bloqueado.
 Você pode usar o botão processar para reativar os números que estão com status pendente.`,
     'phonenumber.info': `Descrição para a agenda, somente para controle próprio.||Quando for usado enquete, será salvo aqui o número que o cliente digitou.`,
+    'phonenumber.doc': ``,
+    'phonenumber.email': ``,
     //PLANOS
     'plan.name': `Nome do plano.`,
     'plan.signup': `Disponibilizar este plano no formulário de registro. Se tiver somente 1 plano os clientes que se registrarem vão usar este plano, se tiver mais de 1, aí o cliente poderá escolher. É necessário ter pelo menos 1 plano com está opção ativada para funcionar o registro.`,

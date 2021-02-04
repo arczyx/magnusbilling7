@@ -56,7 +56,7 @@ class PhoneNumber extends Model
             array('id_phonebook, status, try', 'numerical', 'integerOnly' => true),
             array('name, city', 'length', 'max' => 40),
             array('number', 'length', 'max' => 30),
-            array('info', 'length', 'max' => 200),
+            array('info, doc, email', 'length', 'max' => 200),
         );
     }
 

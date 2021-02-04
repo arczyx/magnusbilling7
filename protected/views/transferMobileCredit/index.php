@@ -326,6 +326,9 @@ $this->endWidget();?>
     var currentValue = 0;
     function handleChange1(argument,total) {
 
+         document.getElementById('amountfielEUR').value = '';
+                document.getElementById('amountfielBDT').value = '';
+
         for (var i = 0; i < total ; i++) {
             document.getElementById('productLabel'+i).style.backgroundColor = '#fff';
         }
@@ -343,9 +346,10 @@ $this->endWidget();?>
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById('aditionalInfo').style.display = 'inline';
                 document.getElementById('aditionalInfoText').innerHTML = this.responseText;
-            }
-            }
 
+
+            }
+        }
         http.open("GET", "../../index.php/TransferMobileCredit/getProductTax?id="+idProduct);
         http.send(null);
     }

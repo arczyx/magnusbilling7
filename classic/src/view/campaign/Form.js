@@ -286,7 +286,13 @@ Ext.define('MBilling.view.campaign.Form', {
                     name: 'description',
                     fieldLabel: t('Description or SMS Text'),
                     allowBlank: true,
-                    maxLength: 300
+                    maxLength: 300,
+                    listeners: {
+                        'change': function(field) {
+                            text = field.getFieldLabel().split('(');
+                            field.setFieldLabel(text[0] + ' (<font color=blue>' + field.getValue().length + '</font>)');
+                        }
+                    }
                 }]
             }, {
                 title: 'TTS',

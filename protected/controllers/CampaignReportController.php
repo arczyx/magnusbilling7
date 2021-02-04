@@ -94,8 +94,12 @@ class CampaignReportController extends Controller
 
                 ],
             ]);
+            if ($modelCampaignReport->totalFailed == 0 || $attributes[$key]['totalDialed'] == 0) {
+                $ratio = 0;
+            } else {
+                $ratio = @($modelCampaignReport->totalFailed / $attributes[$key]['totalDialed']) * 100;
+            }
 
-            $ratio                           = @($modelCampaignReport->totalFailed / $attributes[$key]['totalDialed']) * 100;
             $attributes[$key]['totalFailed'] = $modelCampaignReport->totalFailed . ' (' . number_format($ratio, 2) . '%)';
 
             $modelCampaignReport = CampaignReport::model()->find([
@@ -107,8 +111,12 @@ class CampaignReportController extends Controller
 
                 ],
             ]);
+            if ($modelCampaignReport->totalAmd == 0 || $attributes[$key]['totalDialed'] == 0) {
+                $ratio = 0;
+            } else {
+                $ratio = @($modelCampaignReport->totalAmd / $attributes[$key]['totalDialed']) * 100;
+            }
 
-            $ratio                        = @($modelCampaignReport->totalAmd / $attributes[$key]['totalDialed']) * 100;
             $attributes[$key]['totalAmd'] = $modelCampaignReport->totalAmd . ' (' . number_format($ratio, 2) . '%)';
 
             $modelCampaignReport = CampaignReport::model()->find([
@@ -120,7 +128,11 @@ class CampaignReportController extends Controller
 
                 ],
             ]);
-            $ratio                             = @($modelCampaignReport->totalAnswered / $attributes[$key]['totalDialed']) * 100;
+            if ($modelCampaignReport->totalAnswered == 0 || $attributes[$key]['totalDialed'] == 0) {
+                $ratio = 0;
+            } else {
+                $ratio = @($modelCampaignReport->totalAnswered / $attributes[$key]['totalDialed']) * 100;
+            }
             $attributes[$key]['totalAnswered'] = $modelCampaignReport->totalAnswered . ' (' . number_format($ratio, 2) . '%)';
 
             $modelCampaignReport = CampaignReport::model()->find([
@@ -132,7 +144,11 @@ class CampaignReportController extends Controller
 
                 ],
             ]);
-            $ratio                               = @($modelCampaignReport->totalPressDigit / $attributes[$key]['totalDialed']) * 100;
+            if ($modelCampaignReport->totalPressDigit == 0 || $attributes[$key]['totalDialed'] == 0) {
+                $ratio = 0;
+            } else {
+                $ratio = @($modelCampaignReport->totalPressDigit / $attributes[$key]['totalDialed']) * 100;
+            }
             $attributes[$key]['totalPressDigit'] = $modelCampaignReport->totalPressDigit . ' (' . number_format($ratio, 2) . '%)';
 
             $modelCampaignReport = CampaignReport::model()->find([
@@ -144,7 +160,12 @@ class CampaignReportController extends Controller
 
                 ],
             ]);
-            $ratio                          = @($modelCampaignReport->transfered / $attributes[$key]['totalDialed']) * 100;
+            if ($modelCampaignReport->transfered == 0 || $attributes[$key]['totalDialed'] == 0) {
+                $ratio = 0;
+            } else {
+                $ratio = @($modelCampaignReport->transfered / $attributes[$key]['totalDialed']) * 100;
+            }
+
             $attributes[$key]['transfered'] = $modelCampaignReport->transfered . ' (' . number_format($ratio, 2) . '%)';
 
         }

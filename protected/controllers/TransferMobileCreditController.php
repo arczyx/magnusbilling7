@@ -80,6 +80,7 @@ class TransferMobileCreditController extends Controller
         if (isset($_POST['amountValues'])) {
             $_POST['TransferToMobile']['amountValues'] = $_POST['amountValues'];
         }
+
         //if we already request the number info, check if select a valid amount
         if (isset($_POST['TransferToMobile']['amountValues']) || isset($_POST['TransferToMobile']['amountValuesEUR'])) {
 
@@ -88,7 +89,7 @@ class TransferMobileCreditController extends Controller
             $this->modelTransferToMobile->country  = $_POST['TransferToMobile']['country'];
             $this->modelTransferToMobile->operator = $_POST['TransferToMobile']['operator'];
 
-            if (isset($_POST['TransferToMobile']['amountValuesBDT'])) {
+            if (isset($_POST['TransferToMobile']['amountValuesBDT']) && $_POST['TransferToMobile']['amountValuesBDT'] > 0) {
                 $this->modelTransferToMobile->amountValues = Yii::app()->session['interval_product_id'];
                 $_POST['TransferToMobile']['amountValues'] = Yii::app()->session['interval_product_id'];
             } else {
@@ -100,6 +101,10 @@ class TransferMobileCreditController extends Controller
             } elseif (!count($this->modelTransferToMobile->getErrors())) {
 
                 if (!isset($_POST['TransferToMobile']['confirmed'])) {
+
+                    if (isset($_POST['amountValues'])) {
+                        $_POST['TransferToMobile']['amountValues'] = $_POST['amountValues'];
+                    }
 
                     $modelSendCreditRates = SendCreditRates::model()->find(array(
                         'condition' => 'id_user = :key',
@@ -113,6 +118,11 @@ class TransferMobileCreditController extends Controller
                             ),
                         ),
                     ));
+
+                    if (preg_match_all('/-/', $modelSendCreditRates->idProduct->product) && isset($_POST['TransferToMobile']['amountValuesEUR']) && $_POST['TransferToMobile']['amountValuesEUR'] > 0) {
+                        $modelSendCreditRates->sell_price = $_POST['TransferToMobile']['amountValuesEUR'];
+                    }
+
                     $this->render('confirm', array(
                         'modelTransferToMobile' => $this->modelTransferToMobile,
                         'modelSendCreditRates'  => $modelSendCreditRates,
@@ -121,6 +131,7 @@ class TransferMobileCreditController extends Controller
 
                     exit;
                 } else {
+
                     $this->confirmRefill();
                 }
 
@@ -249,7 +260,7 @@ error_txt=Transaction successful';
         return $result;
     }
 
-    public function calculateCost($product = 0)
+    public function calculateCost($product = 0, $post)
     {
 
         $methosProfit = 'transfer_international_profit';
@@ -270,9 +281,15 @@ error_txt=Transaction successful';
 
         $user_profit = $this->modelTransferToMobile->{$methosProfit};
 
-        $this->user_cost = $this->cost - ($this->cost * ($user_profit / 100));
+        if (isset($post['TransferToMobile']['amountValuesBDT']) && $post['TransferToMobile']['amountValuesBDT'] > 0) {
 
-        $this->user_profit = $this->cost * ($user_profit / 100);
+            $this->user_cost   = ($post['TransferToMobile']['amountValuesBDT'] * $this->cost) - ($post['TransferToMobile']['amountValuesBDT'] * $this->cost) * ($user_profit / 100);
+            $this->user_profit = ($post['TransferToMobile']['amountValuesBDT'] * $this->cost) * ($user_profit / 100);
+        } else {
+            $this->user_cost   = $this->cost - ($this->cost * ($user_profit / 100));
+            $this->user_profit = $this->cost * ($user_profit / 100);
+
+        }
 
         if ($this->test == true) {
             echo 'cost=' . $this->cost . ', user_profit= ' . $this->cost * ($this->user_profit / 100) . ' user_profit=' . $this->user_profit . "<BR>";
@@ -340,6 +357,11 @@ error_txt=Transaction successful';
             ),
         ));
 
+        if (preg_match_all('/-/', $modelSendCreditRates->idProduct->product) && isset($_POST['TransferToMobile']['amountValuesEUR']) && $_POST['TransferToMobile']['amountValuesEUR'] > 0) {
+            $modelSendCreditRates->sell_price = $_POST['TransferToMobile']['amountValuesEUR'];
+
+        }
+
         if (!isset($modelSendCreditRates->id)) {
 
             echo '<div align=center id="container">';
@@ -356,7 +378,24 @@ error_txt=Transaction successful';
         $this->operator_name                  = $modelSendCreditRates->idProduct->operator_name;
         $this->modelTransferToMobile->product = $product = $modelSendCreditRates->idProduct->product;
 
-        $this->calculateCost($product);
+        $this->calculateCost($product, $_POST);
+        /*
+        echo '<pre>';
+        print_r($_POST);
+
+        echo 'sell_price ' . $this->sell_price . "<br>";
+        echo 'cost ' . $this->cost . "<br>";
+        echo 'local_currency ' . $this->local_currency . "<br>";
+        echo 'operator_name ' . $this->operator_name . "<br>";
+        echo 'product ' . $this->modelTransferToMobile->product . "<br>";
+
+        echo 'user_cost ' . $this->user_cost . "<br>";
+
+        echo 'user_profit ' . $this->user_profit . "<br>";
+
+        echo $modelSendCreditRates->idProduct->provider . "<br>";
+        exit;
+         */
 
         $this->addInDataBase();
 
@@ -523,12 +562,12 @@ error_txt=Transaction successful';
             $modelRefill = Refill::model()->find('description LIKE :key AND date BETWEEN :key1 AND  NOW() AND payment = 1 AND id_user = :key2',
                 array(
                     ':key'  => "%" . $number . "%",
-                    ':key1' => date('Y-m-d H:i', mktime(date('H'), date('i') - 10, date('s'), date('m'), date('d'), date('Y'))),
+                    ':key1' => date('Y-m-d H:i', mktime(date('H'), date('i') - 2, date('s'), date('m'), date('d'), date('Y'))),
                     ':key2' => Yii::app()->session['id_user'],
                 ));
             if (isset($modelRefill->id)) {
                 echo '<div align=center id="container">';
-                echo "<font color=red>You already send credit to this number. Wait minimal 10 minutes to new recharge</font>";
+                echo "<font color=red>You already send credit to this number. Wait minimal 2 minutes to new recharge</font>";
                 echo '</div>';
                 exit;
             }

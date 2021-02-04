@@ -49,6 +49,7 @@ class DidAgi
                 $this->did           = $this->modelDid->did;
                 $MAGNUS->record_call = $this->modelDid->record_call;
                 $agi->set_variable("RECORD_CALL_DID", $MAGNUS->record_call);
+                $agi->set_variable('DID_NUMBER', $this->did);
 
                 $sql               = "SELECT * FROM pkg_user WHERE id = " . $this->modelDid->id_user . " LIMIT 1";
                 $MAGNUS->modelUser = $agi->query($sql)->fetch(PDO::FETCH_OBJ);

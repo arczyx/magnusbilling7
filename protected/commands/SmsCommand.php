@@ -109,8 +109,11 @@ class SmsCommand extends ConsoleCommand
 
                 //print_r($sms->getAttributes());
                 //print_r($campaign->getAttributes());
-
                 $text = preg_replace("/\%name\%/", $sms->name, $campaign->description);
+                $text = preg_replace("/\%city\%/", $sms->city, $text);
+                $text = preg_replace("/\%doc\%/", $sms->doc, $text);
+                $text = preg_replace("/\%email\%/", $sms->email, $text);
+                $text = preg_replace("/\%info\%/", $sms->info, $text);
 
                 if ($sms->number == '' || !is_numeric($sms->number)) {
                     PhoneNumber::model()->deleteByPk((int) $sms->id);
@@ -136,9 +139,7 @@ class SmsCommand extends ConsoleCommand
                             $sms->save();
                             exit;
                         }
-
                     }
-
                 }
 
                 $res = SmsSend::send($sms->idPhonebook->idUser, $sms->number, $text, $sms->id, $campaign->from);

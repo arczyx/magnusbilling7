@@ -36,8 +36,16 @@ Ext.define('MBilling.view.phoneNumber.Form', {
             fieldLabel: t('Name'),
             allowBlank: true
         }, {
+            name: 'doc',
+            fieldLabel: t('DOC'),
+            allowBlank: true
+        }, {
             name: 'city',
             fieldLabel: t('City'),
+            allowBlank: true
+        }, {
+            name: 'email',
+            fieldLabel: t('Email'),
             allowBlank: true
         }, {
             xtype: 'statuscombo',

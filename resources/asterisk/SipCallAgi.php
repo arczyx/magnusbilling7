@@ -167,7 +167,7 @@ class SipCallAgi
         {
             $didAgi                                  = new DidAgi();
             $didAgi->modelDestination[0]['id_queue'] = $optionValue;
-            QueueAgi::callQueue($agi, $MAGNUS, $CalcAgi, $didAgi, $type);
+            QueueAgi::callQueue($agi, $MAGNUS, $CalcAgi, $didAgi);
             $dialstatus = $CalcAgi->sessiontime > 0 ? 'ANSWER' : 'DONTCALL';
         } else if (preg_match("/^number/", $optionType)) //envia para um fixo ou celular
         {

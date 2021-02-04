@@ -235,10 +235,10 @@ Help.load({
 
 
     Regular expression for mobile
-    ^[1-9][0-9]9\d{8}$|^0[1-9][0-9]9\d{8}$|^55[1-9][0-9]9\d{8}$
+    ^[1-9][0-9]9\\d{8}$|^0[1-9][0-9]9\\d{8}$|^55[1-9][0-9]9\\d{8}$
 
     Regular expression for landline
-    ^[1-9][0-9]\d{8}$|^0[1-9][0-9]\d{8}$|^55[1-9][0-9]\d{8}$
+    ^[1-9][0-9]\\d{8}$|^0[1-9][0-9]\\d{8}$|^55[1-9][0-9]\\d{8}$
 
 
     `,
@@ -476,6 +476,8 @@ Otherwise will stay pending, this means that your trunk rejected the call and co
 If is activated in the campaign the "blocked numbers" option, if the number is registered in the "calls & SMS" menu, "restricted numbers" submenu, blocked status.
 You can use the button "process" to reactivate the numbers with pending status.`,
     'phonenumber.info': `Phonebook description, personal control only||When used for survey, will be saved here what the number that the client typed.`,
+    'phonenumber.doc': ``,
+    'phonenumber.email': ``,
     //PLANS
     'plan.name': `Plan name`,
     'plan.signup': `Making avaible this plan in the signup formulary. If only has 1 plan, the clients that register will use this plan, if theres more than 1 plan, then the client will be able to choose. It's necessary to have at least 1 plan with this option activated to make the registers work.`,

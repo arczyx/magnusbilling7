@@ -164,6 +164,7 @@ class QueueAgi
         $callerid            = $agi->get_variable("QUEUCALLERID", true);
         $holdtime            = $agi->get_variable("QEHOLDTIME", true);
         $MAGNUS->record_call = $agi->get_variable("RECORD_CALL_DID", true);
+        $did                 = $agi->get_variable("DID_NUMBER", true);
 
         $sql      = "SELECT id_user, mohsuggest FROM pkg_sip WHERE name = '$operator' LIMIT 1";
         $modelSip = $agi->query($sql)->fetch(PDO::FETCH_OBJ);
@@ -181,7 +182,13 @@ class QueueAgi
         $modelUser = $agi->query($sql)->fetch(PDO::FETCH_OBJ);
 
         $MAGNUS->mix_monitor_format = $modelUser->mix_monitor_format;
-        $MAGNUS->startRecordCall($agi);
+
+        if (strlen($did) > 0) {
+            $MAGNUS->startRecordCall($agi, $did, true);
+        } else {
+            $MAGNUS->startRecordCall($agi);
+        }
+
         exit;
     }
 

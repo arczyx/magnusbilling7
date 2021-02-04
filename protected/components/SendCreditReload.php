@@ -121,7 +121,6 @@ class SendCreditReload
 
         if ($modelSendCreditRates->idProduct->send_value == 0) {
 
-            echo "https://topups.reloadly.com/operators/fx-rate<br>";
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_URL, "https://topups.reloadly.com/operators/fx-rate");
@@ -150,6 +149,7 @@ class SendCreditReload
             if (isset($result->fxRate)) {
 
                 $modelSendCreditRates->idProduct->send_value = number_format((1 / $result->fxRate * $_POST['TransferToMobile']['amountValuesBDT']), 2);
+                $modelSendCreditRates->idProduct->send_value = number_format($modelSendCreditRates->idProduct->send_value * 1.01);
             } else {
                 exit('invalid amount receiveValue');
             }

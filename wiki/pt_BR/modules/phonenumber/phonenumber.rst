@@ -64,3 +64,23 @@ Descrição
 
 
 
+
+.. _phoneNumber-doc:
+
+CPF/CNPJ
+--------
+
+| Nós ainda não escrevemos a descrição deste campo.
+
+
+
+
+.. _phoneNumber-email:
+
+Email
+-----
+
+| Nós ainda não escrevemos a descrição deste campo.
+
+
+

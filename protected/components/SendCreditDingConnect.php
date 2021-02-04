@@ -26,13 +26,14 @@ class SendCreditDingConnect
 
         if ($send_value == 0) {
 
-            $post = array(
+            $post = [[
+
                 "SendValue"       => 5,
                 "SendCurrencyIso" => "EUR",
                 "ReceiveValue"    => 0,
                 "SkuCode"         => "BD_AX_TopUp",
                 "BatchItemRef"    => "string",
-            );
+            ]];
 
             $ch = curl_init();
 
@@ -51,9 +52,11 @@ class SendCreditDingConnect
 
             $result = json_decode($server_output);
 
-            if (isset($result->Item->Price->ReceiveValue)) {
+            if (isset($result->Items[0]->Price->ReceiveValue)) {
 
-                $send_value = number_format((5 / $result->Item->Price->ReceiveValue * $_POST['TransferToMobile']['amountValuesBDT']), 2);
+                $send_value = number_format(5 / $result->Items[0]->Price->ReceiveValue * $_POST['TransferToMobile']['amountValuesBDT'], 2);
+                $end_value  = number_format($send_value * 1.01);
+
             } else {
                 exit('invalid amount receiveValue');
             }
